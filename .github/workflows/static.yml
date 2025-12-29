@@ -1,43 +1,811 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pocket Insight 2.0 - 破壊的ビジネスモデルキャンバス</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
+        :root {
+            --富士: #FF6B6B;
+            --鷹: #4ECDC4;
+            --茄子: #9B59B6;
+            --夜空: #0F1419;
+            --朝焼け: #FFB347;
+            --白雲: #F8F9FA;
+        }
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #0F1419 0%, #1a1f3a 50%, #2d1b3d 100%);
+            color: var(--白雲);
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(78, 205, 196, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(155, 89, 182, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+        .container {
+            position: relative;
+            z-index: 1;
+        }
 
-jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 4.5rem;
+            background: linear-gradient(135deg, var(--富士), var(--鷹), var(--茄子));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+        }
+
+        .header .tagline {
+            font-size: 1.8rem;
+            color: var(--朝焼け);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--白雲);
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        .三宝バッジ {
+            display: inline-flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .宝 {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1rem;
+            border: 2px solid;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .宝:nth-child(1) {
+            border-color: var(--富士);
+            color: var(--富士);
+        }
+
+        .宝:nth-child(2) {
+            border-color: var(--鷹);
+            color: var(--鷹);
+        }
+
+        .宝:nth-child(3) {
+            border-color: var(--茄子);
+            color: var(--茄子);
+        }
+
+        .宝:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .vision-section {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1.2s ease-out 0.3s backwards;
+        }
+
+        .vision-section h2 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2.5rem;
+            color: var(--朝焼け);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .vision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .vision-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .vision-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--鷹);
+        }
+
+        .vision-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vision-card h3 {
+            color: var(--鷹);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .canvas-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1.5s ease-out 0.5s backwards;
+        }
+
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .canvas-cell {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            animation: slideUp 0.8s ease-out backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--富士), var(--鷹), var(--茄子));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .canvas-cell:hover::before {
+            transform: scaleX(1);
+        }
+
+        .canvas-cell:nth-child(1) { animation-delay: 0.1s; }
+        .canvas-cell:nth-child(2) { animation-delay: 0.2s; }
+        .canvas-cell:nth-child(3) { animation-delay: 0.3s; }
+        .canvas-cell:nth-child(4) { animation-delay: 0.4s; }
+        .canvas-cell:nth-child(5) { animation-delay: 0.5s; }
+        .canvas-cell:nth-child(6) { animation-delay: 0.6s; }
+        .canvas-cell:nth-child(7) { animation-delay: 0.7s; }
+        .canvas-cell:nth-child(8) { animation-delay: 0.8s; }
+        .canvas-cell:nth-child(9) { animation-delay: 0.9s; }
+
+        .canvas-cell:hover {
+            transform: translateY(-8px);
+            border-color: var(--朝焼け);
+            box-shadow: 0 15px 40px rgba(255, 179, 71, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .canvas-cell.key-partners { grid-column: 1; grid-row: 1 / 3; }
+        .canvas-cell.key-activities { grid-column: 2; grid-row: 1; }
+        .canvas-cell.value-propositions { 
+            grid-column: 3; 
+            grid-row: 1 / 3; 
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(155, 89, 182, 0.2));
+            border: 3px solid var(--朝焼け);
+        }
+        .canvas-cell.customer-relationships { grid-column: 4; grid-row: 1; }
+        .canvas-cell.customer-segments { grid-column: 5; grid-row: 1 / 3; }
+        .canvas-cell.key-resources { grid-column: 2; grid-row: 2; }
+        .canvas-cell.channels { grid-column: 4; grid-row: 2; }
+
+        .canvas-cell.cost-structure { 
+            grid-column: 1 / 4;
+            background: rgba(78, 205, 196, 0.15);
+        }
+        .canvas-cell.revenue-streams { 
+            grid-column: 4 / 6;
+            background: rgba(255, 179, 71, 0.15);
+        }
+
+        .cell-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.4rem;
+            color: var(--朝焼け);
+            margin-bottom: 1.2rem;
+            letter-spacing: 2px;
+            border-bottom: 3px solid var(--朝焼け);
+            padding-bottom: 0.8rem;
+            font-weight: 900;
+        }
+
+        .value-propositions .cell-title {
+            color: white;
+            border-color: white;
+            font-size: 1.6rem;
+        }
+
+        .cell-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .cell-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .cell-content li {
+            padding: 0.7rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .cell-content li:before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--鷹);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .cell-content strong {
+            color: var(--朝焼け);
+        }
+
+        .breakthrough-badge {
+            background: linear-gradient(135deg, var(--富士), var(--茄子));
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 0.8rem;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+            text-transform: uppercase;
+        }
+
+        .feature-badge {
+            background: var(--鷹);
+            color: var(--夜空);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 1.8rem;
+            margin-top: 1.8rem;
+        }
+
+        .phase-section {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border-left: 6px solid var(--富士);
+            animation: fadeIn 1.5s ease-out 1.2s backwards;
+        }
+
+        .phase-section h2 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2.8rem;
+            color: var(--富士);
+            margin-bottom: 2rem;
+            letter-spacing: 3px;
+        }
+
+        .phase-timeline {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .phase-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.phase-1 { border-color: var(--富士); }
+        .phase-card.phase-2 { border-color: var(--鷹); }
+        .phase-card.phase-3 { border-color: var(--茄子); }
+
+        .phase-card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .phase-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .phase-card.phase-1 h3 { color: var(--富士); }
+        .phase-card.phase-2 h3 { color: var(--鷹); }
+        .phase-card.phase-3 h3 { color: var(--茄子); }
+
+        .phase-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .phase-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .seo-section {
+            margin-top: 3rem;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(155, 89, 182, 0.1));
+            border-radius: 20px;
+            border: 2px solid var(--鷹);
+            animation: fadeIn 1.8s ease-out 1.5s backwards;
+        }
+
+        .seo-section h2 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2.5rem;
+            color: var(--鷹);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .seo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .seo-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .seo-card h3 {
+            color: var(--朝焼け);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .canvas-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+
+            .canvas-cell.key-partners,
+            .canvas-cell.value-propositions,
+            .canvas-cell.customer-segments {
+                grid-column: span 1;
+                grid-row: auto;
+            }
+
+            .canvas-cell.cost-structure,
+            .canvas-cell.revenue-streams {
+                grid-column: span 1;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .canvas-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>POCKET INSIGHT 2.0</h1>
+            <p class="tagline">移動時間を創造の時間に変える</p>
+            <p class="subtitle">位置情報 × エンタメ × クリエイティブプラットフォーム<br>
+            帰省・旅行の移動を「世界で最も楽しい時間」へ</p>
+            <div class="三宝バッジ">
+                <div class="宝">🗻 一富士：景色を見逃さない</div>
+                <div class="宝">🦅 二鷹：クリエイティブに舞い上がる</div>
+                <div class="宝">🍆 三茄子：共創の実りを収穫</div>
+            </div>
+        </div>
+
+        <!-- ビジョンセクション -->
+        <div class="vision-section">
+            <h2>🎨 進化するビジョン</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.8;">
+                Pocket Insightは、単なる「景色アラート」から<strong style="color: var(--朝焼け);">「移動時間のクリエイティブ・プラットフォーム」</strong>へ。<br>
+                同じ電車に乗る人たちが、小説、音楽、詩、イラストを共創し、車窓と融合した没入体験を楽しむ。
+            </p>
+            <div class="vision-grid">
+                <div class="vision-card">
+                    <div class="icon">📖</div>
+                    <h3>小説創作</h3>
+                    <p>車窓の景色をインスピレーションに、みんなで物語を紡ぐ。リレー小説、選択肢型小説、位置連動ストーリー。</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">🎵</div>
+                    <h3>音楽体験</h3>
+                    <p>移動の音や景色に合わせた音楽を自動再生。ユーザーが作曲した「東海道新幹線ソング」をシェア。</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">✍️</div>
+                    <h3>詩の創作</h3>
+                    <p>富士山を見た瞬間に詠む俳句。夕焼けに合わせた短歌。移動中の感動を言葉に。</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">🎨</div>
+                    <h3>イラスト共有</h3>
+                    <p>車窓スケッチ、デジタルアート、AIイラスト。景色とアートが融合した体験。</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">🚄</div>
+                    <h3>同乗者コミュニティ</h3>
+                    <p>同じ新幹線に乗っている人だけが参加できるリアルタイムチャット・クリエイティブセッション。</p>
+                </div>
+                <div class="vision-card">
+                    <div class="icon">🌏</div>
+                    <h3>グローバル展開</h3>
+                    <p>海外の電車、飛行機、ハイキング、星空観察まで。移動のあらゆるシーンをカバー。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ビジネスモデルキャンバス -->
+        <div class="canvas-container">
+            <div class="canvas-grid">
+                <!-- Key Partners -->
+                <div class="canvas-cell key-partners">
+                    <h2 class="cell-title">主要パートナー</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>交通事業者</strong><br>JR各社、私鉄、航空会社、バス会社との提携。車内WiFi連携、専用コンテンツ提供。</li>
+                            <li><strong>クリエイター・アーティスト</strong><br>小説家、音楽家、イラストレーター。公式コラボコンテンツ制作。</li>
+                            <li><strong>観光地・自治体</strong><br>地域プロモーション、観光コンテンツの共同開発。</li>
+                            <li><strong>音楽配信サービス</strong><br>Spotify、Apple Music等とのAPI連携。</li>
+                            <li><strong>AI技術パートナー</strong><br>音楽生成AI、イラストAI、テキスト生成AI。</li>
+                        </ul>
+                        <div class="breakthrough-badge">🤝 エコシステム型提携</div>
+                    </div>
+                </div>
+
+                <!-- Key Activities -->
+                <div class="canvas-cell key-activities">
+                    <h2 class="cell-title">主要活動</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li>位置情報ベースのコンテンツ配信</li>
+                            <li>UGCプラットフォーム運営（小説・音楽・詩・イラスト）</li>
+                            <li>リアルタイム同乗者マッチング</li>
+                            <li>AIコンテンツ生成エンジン開発</li>
+                            <li>SEO最適化（全路線網羅）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Value Propositions (中央・強調) -->
+                <div class="canvas-cell value-propositions">
+                    <h2 class="cell-title">💎 価値提案</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>移動時間の再発明</strong><br>「退屈な時間」→「創造の時間」への変革。移動が目的になる体験。</li>
+                            <li><strong>位置連動型エンタメ</strong><br>富士山アラート、トンネル突入BGM、夕焼け詩。景色とコンテンツが完全同期。</li>
+                            <li><strong>共創プラットフォーム</strong><span class="feature-badge">NEW</span><br>同じ電車の乗客が協力して小説を書く、音楽を作る。偶然の出会いから生まれる創造性。</li>
+                            <li><strong>没入感の極大化</strong><br>車窓+音楽+物語が融合。五感を刺激する総合芸術体験。</li>
+                            <li><strong>ログイン不要の手軽さ</strong><br>SNS連携のみで即参加。</li>
+                        </ul>
+                        <div class="breakthrough-badge">🚀 移動を「アート」に</div>
+                    </div>
+                </div>
+
+                <!-- Customer Relationships -->
+                <div class="canvas-cell customer-relationships">
+                    <h2 class="cell-title">顧客との関係</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>セルフサービス型</strong><br>Web/PWAで完結</li>
+                            <li><strong>コミュニティ主導</strong><br>UGC中心のエコシステム</li>
+                            <li><strong>リアルタイム協働</strong><span class="feature-badge">革新</span><br>同乗者との即興創作</li>
+                            <li><strong>AIアシスト</strong><br>創作をサポート</li>
+                        </ul>
+                        <div class="breakthrough-badge">👥 偶然の共創</div>
+                    </div>
+                </div>
+
+                <!-- Customer Segments -->
+                <div class="canvas-cell customer-segments">
+                    <h2 class="cell-title">顧客セグメント</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>帰省・旅行者（コア）</strong><br>年末年始、GW、お盆の大移動期。特別な思い出作り。</li>
+                            <li><strong>クリエイター</strong><br>小説家、音楽家、詩人、アーティスト。作品発表の場。</li>
+                            <li><strong>大人の趣味層</strong><br>移動時間を自己表現に使いたい層。</li>
+                            <li><strong>ビジネス出張者</strong><br>移動を生産的に過ごしたい層。</li>
+                            <li><strong>若年層SNSユーザー</strong><br>シェアして楽しむ世代。</li>
+                        </ul>
+                        <div class="breakthrough-badge">🎯 クリエイター経済</div>
+                    </div>
+                </div>
+
+                <!-- Key Resources -->
+                <div class="canvas-cell key-resources">
+                    <h2 class="cell-title">リソース</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li>位置情報技術（高精度GPS）</li>
+                            <li>コンテンツDB（全路線網羅）</li>
+                            <li>UGCプラットフォーム</li>
+                            <li>AI生成エンジン（音楽・イラスト・テキスト）</li>
+                            <li>リアルタイムマッチング技術</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Channels -->
+                <div class="canvas-cell channels">
+                    <h2 class="cell-title">チャネル</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>PWA（Web）</strong><br>アプリ不要、即アクセス</li>
+                            <li><strong>SNS連携</strong><br>Twitter/Instagram導線</li>
+                            <li><strong>QRコード</strong><br>車内・駅での即起動</li>
+                            <li><strong>SEO</strong><span class="feature-badge">重要</span><br>全路線網羅記事</li>
+                        </ul>
+                        <div class="breakthrough-badge">🌐 検索最適化</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="bottom-grid">
+                <!-- Cost Structure -->
+                <div class="canvas-cell cost-structure">
+                    <h2 class="cell-title">コスト構造</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>技術開発・保守</strong>：位置情報システム、PWA、リアルタイム通信、AI統合</li>
+                            <li><strong>コンテンツ制作</strong>：SEO記事（全路線）、公式コラボコンテンツ、UGC管理</li>
+                            <li><strong>AI API費用</strong>：音楽生成、イラスト生成、テキスト生成の利用料</li>
+                            <li><strong>サーバー・インフラ</strong>：クラウド、CDN、データベース</li>
+                            <li><strong>マーケティング</strong>：SNS広告、パートナーシップ開発、帰省シーズンキャンペーン</li>
+                        </ul>
+                        <div class="breakthrough-badge">💡 UGCでコスト最適化</div>
+                    </div>
+                </div>
+
+                <!-- Revenue Streams -->
+                <div class="canvas-cell revenue-streams">
+                    <h2 class="cell-title">収益の流れ</h2>
+                    <div class="cell-content">
+                        <ul>
+                            <li><strong>プレミアム会員</strong><br>広告非表示、AI機能無制限、オフライン保存、限定コンテンツ</li>
+                            <li><strong>クリエイターマネタイズ</strong><span class="feature-badge">革新</span><br>投げ銭、有料コンテンツ販売（小説・音楽）</li>
+                            <li><strong>広告収益</strong><br>位置連動型広告、観光地プロモーション</li>
+                            <li><strong>企業コラボ</strong><br>交通事業者、自治体との共同企画</li>
+                            <li><strong>データライセンス</strong><br>匿名化された移動・興味データ</li>
+                        </ul>
+                        <div class="breakthrough-badge">🎁 多層収益モデル</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 展開フェーズ -->
+        <div class="phase-section">
+            <h2>🗺️ 3段階展開戦略</h2>
+            <div class="phase-timeline">
+                <!-- Phase 1 -->
+                <div class="phase-card phase-1">
+                    <h3>Phase 1：一富士（現在〜6ヶ月）</h3>
+                    <p style="margin-bottom: 1rem; opacity: 0.9;">基盤確立とSEO制覇。帰省シーズンに集中投下。</p>
+                    <div class="phase-items">
+                        <div class="phase-item">✅ 東海道新幹線（全駅）コンテンツ完成</div>
+                        <div class="phase-item">✅ 山陽新幹線・九州新幹線</div>
+                        <div class="phase-item">✅ 東北・北海道・北陸新幹線</div>
+                        <div class="phase-item">✅ 主要特急全線（サンダーバード、しらさぎ、あずさ等）</div>
+                        <div class="phase-item">✅ お正月キャンペーン「一富士二鷹三茄子」</div>
+                        <div class="phase-item">✅ SEO記事300本（全路線網羅）</div>
+                        <div class="phase-item">📱 PWA v1.0リリース</div>
+                        <div class="phase-item">🔔 基本アラート機能</div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-card phase-2">
+                    <h3>Phase 2：二鷹（6ヶ月〜18ヶ月）</h3>
+                    <p style="margin-bottom: 1rem; opacity: 0.9;">クリエイティブ機能実装。共創プラットフォーム化。</p>
+                    <div class="phase-items">
+                        <div class="phase-item">📖 小説創作機能（リレー小説・選択肢型）</div>
+                        <div class="phase-item">🎵 音楽再生・作曲ツール統合</div>
+                        <div class="phase-item">✍️ 詩・俳句投稿機能</div>
+                        <div class="phase-item">🎨 イラスト投稿・AI生成</div>
+                        <div class="phase-item">👥 リアルタイム同乗者マッチング</div>
+                        <div class="phase-item">💰 クリエイターマネタイズ開始</div>
+                        <div class="phase-item">🌏 国内全路線（JR・私鉄・バス）</div>
+                        <div class="phase-item">✈️ 国内線飛行機対応</div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-card phase-3">
+                    <h3>Phase 3：三茄子（18ヶ月〜）</h3>
+                    <p style="margin-bottom: 1rem; opacity: 0.9;">グローバル展開。移動のあらゆるシーンをカバー。</p>
+                    <div class="phase-items">
+                        <div class="phase-item">🌍 海外鉄道（欧州・アジア・北米）</div>
+                        <div class="phase-item">✈️ 国際線フライト対応</div>
+                        <div class="phase-item">🥾 ハイキング・トレッキングコース</div>
+                        <div class="phase-item">🚶 都市散歩ルート</div>
+                        <div class="phase-item">⭐ 星空観察スポット</div>
+                        <div class="phase-item">🚢 クルーズ船対応</div>
+                        <div class="phase-item">🏔️ ロードトリップ（車移動）</div>
+                        <div class="phase-item">🤖 AI完全統合（自動作曲・物語生成）</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO戦略 -->
+        <div class="seo-section">
+            <h2>🔍 SEO制覇戦略：帰省シーズンを独占</h2>
+            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+                「東海道新幹線 富士山 見える」「新大阪 東京 車窓」など、移動に関連するあらゆる検索ワードで1位を目指す。
+            </p>
+            <div class="seo-grid">
+                <div class="seo-card">
+                    <h3>🚄 新幹線全駅コンテンツ</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✦ 東海道：各駅の見どころ、車窓ガイド</li>
+                        <li>✦ 山陽・九州：博多〜鹿児島中央</li>
+                        <li>✦ 東北・北海道：東京〜新函館北斗</li>
+                        <li>✦ 北陸：金沢、富山ルート</li>
+                    </ul>
+                </div>
+                <div class="seo-card">
+                    <h3>🚃 特急全線網羅</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✦ サンダーバード、しらさぎ、あずさ</li>
+                        <li>✦ はるか、くろしお、南紀</li>
+                        <li>✦ 成田エクスプレス、スペーシア</li>
+                        <li>✦ 観光列車（SL、絶景列車）</li>
+                    </ul>
+                </div>
+                <div class="seo-card">
+                    <h3>🎌 季節・イベント連動</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✦ お正月：一富士二鷹三茄子特集</li>
+                        <li>✦ 桜・紅葉：絶景車窓ランキング</li>
+                        <li>✦ GW・お盆：帰省特集</li>
+                        <li>✦ 年末年始：移動攻略ガイド</li>
+                    </ul>
+                </div>
+                <div class="seo-card">
+                    <h3>📍 ロングテールKW</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✦ 「新幹線 富士山 右側 左側」</li>
+                        <li>✦ 「東京 大阪 車窓 おすすめ」</li>
+                        <li>✦ 「帰省 暇つぶし アプリ」</li>
+                        <li>✦ 「電車 小説 書く」</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 4rem; text-align: center; padding: 2rem; background: rgba(255, 255, 255, 0.03); border-radius: 15px;">
+            <p style="font-size: 1.3rem; color: var(--朝焼け); margin-bottom: 1rem; font-weight: 700;">
+                🚀 Pocket Insightは、移動時間を「世界で最も創造的な時間」に変える
+            </p>
+            <p style="opacity: 0.85; line-height: 1.8;">
+                位置情報とエンタメを掛け合わせ、さらにクリエイティブプラットフォーム化することで、<br>
+                従来の「移動支援アプリ」の枠を完全に破壊し、新しい市場を創造します。<br>
+                <strong style="color: var(--富士);">一富士二鷹三茄子</strong>の精神で、段階的に夢を実現していきます。
+            </p>
+            <p style="margin-top: 1.5rem; opacity: 0.6; font-size: 0.95rem;">
+                Created for Pocket Insight 2.0 | Business Model Canvas
+            </p>
+        </div>
+    </div>
+</body>
+</html>
